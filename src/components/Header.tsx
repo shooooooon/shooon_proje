@@ -38,8 +38,8 @@ export default function Header() {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/admin">
-                管理画面
+              <Link href="/about">
+                About
               </Link>
             </Button>
             <div className="ml-2">
@@ -91,8 +91,8 @@ export default function Header() {
               className="w-full justify-start"
               asChild
             >
-              <Link href="/admin" onClick={closeMenu}>
-                管理画面
+              <Link href="/about" onClick={closeMenu}>
+                About
               </Link>
             </Button>
           </div>

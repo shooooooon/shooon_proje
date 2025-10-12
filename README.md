@@ -1,14 +1,31 @@
-# Modern Blog - Next.js + Supabase
+# Modern Blog - AIファースト投稿システム
 
-Next.js 15とSupabaseを使用した現代的なブログシステムです。
+AIとCLIによる投稿に特化したブログプラットフォーム。管理画面なし、閲覧者向けUIは洗練されたデザイン。
+
+## 🎯 コンセプト
+
+**AIファースト + CLI緊急投稿 = 管理画面不要**
+
+- **AI自動投稿（メイン）**: OpenAI/Anthropic APIで記事を自動生成
+- **CLI緊急投稿（サブ）**: 人間がコマンドラインから迅速に投稿
+- **閲覧者向けUI**: 洗練されたブログフロントエンド
+- **管理画面**: なし（不要）
 
 ## 主な機能
 
-- ✅ 記事の投稿・編集・削除（CRUD）
-- ✅ AI記事生成（OpenAI / Anthropic）
-- ✅ CLI投稿ツール
+### 投稿機能
+- ✅ AI記事自動生成（OpenAI / Anthropic）
+- ✅ CLI投稿ツール（緊急投稿用）
+- ✅ スラッグ自動生成
+- ✅ 下書き/公開ステータス（予定）
+
+### 閲覧者向け機能
+- ✅ 記事一覧・検索
+- ✅ 記事詳細・TOC
+- ✅ ダークモード対応
 - ✅ レスポンシブデザイン
-- ✅ スラッグベースのURL
+- ✅ シェア機能
+- ✅ 関連記事表示
 
 ## 技術スタック
 
@@ -16,6 +33,7 @@ Next.js 15とSupabaseを使用した現代的なブログシステムです。
 - **Supabase** - PostgreSQL、Row Level Security
 - **TypeScript** - 型安全な開発
 - **Tailwind CSS 4** - スタイリング
+- **shadcn/ui** - UIコンポーネント
 - **OpenAI / Anthropic** - AI記事生成
 
 ## セットアップ
@@ -40,7 +58,7 @@ Supabaseダッシュボード → SQL Editor で `supabase-schema.sql` の内容
 
 ### 4. 環境変数の設定
 
-`.env.local` を編集して実際の値を設定：
+`.env.local` を作成して実際の値を設定：
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
@@ -63,28 +81,46 @@ http://localhost:3000 でアプリケーションにアクセスできます。
 
 ## 使用方法
 
-### Web UI
-
-- **ホーム (`/`)**: 記事一覧の表示
-- **記事詳細 (`/posts/[slug]`)**: 個別記事の表示
-- **管理画面 (`/admin`)**: 記事の投稿・編集・削除
-
-### CLI投稿ツール
+### AI記事生成（メイン投稿手段）
 
 ```bash
-npm run post -- "記事タイトル" "著者名" "./cli/sample-content.md"
+# API経由でAI記事を生成・投稿
+curl -X POST http://localhost:3000/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Next.js 15の新機能について詳しく解説して",
+    "provider": "openai"
+  }'
+```
+
+### CLI投稿（緊急投稿用）
+
+```bash
+# 基本的な投稿
+npm run post -- "記事タイトル" "著者名" "./content.md"
+
+# インタラクティブモード（予定）
+npm run post
+
+# エディタで編集（予定）
+npm run post -- --edit
+
+# AI生成と組み合わせ（予定）
+npm run post -- --ai "記事のトピック"
 ```
 
 詳細は [cli/README.md](./cli/README.md) を参照してください。
 
-### AI記事生成
+## 閲覧者向けページ
 
-管理画面の投稿フォームで「AIで本文を生成」ボタンをクリック。
+- **ホーム (`/`)**: 記事一覧・検索
+- **記事詳細 (`/posts/[slug]`)**: 個別記事・TOC・シェア
+- **About (`/about`)**: プロジェクト概要
 
 ## API エンドポイント
 
 - `GET /api/posts` - 全記事取得
-- `POST /api/posts` - 記事投稿
+- `POST /api/posts` - 記事投稿（CLI/AI用）
 - `GET /api/posts/[id]` - 記事取得（ID）
 - `PUT /api/posts/[id]` - 記事更新
 - `DELETE /api/posts/[id]` - 記事削除
@@ -98,17 +134,29 @@ npm run post -- "記事タイトル" "著者名" "./cli/sample-content.md"
 shooon_proje/
 ├── src/
 │   ├── app/
-│   │   ├── api/          # APIルート
+│   │   ├── api/          # API（投稿・AI生成）
 │   │   ├── posts/        # 記事詳細ページ
-│   │   ├── admin/        # 管理画面
-│   │   └── layout.tsx    # レイアウト
-│   ├── components/       # Reactコンポーネント
+│   │   ├── about/        # Aboutページ
+│   │   └── page.tsx      # ホームページ
+│   ├── components/       # UIコンポーネント
 │   ├── lib/              # ユーティリティ
 │   └── types/            # TypeScript型定義
 ├── cli/                  # CLI投稿ツール
 ├── supabase-schema.sql   # DBスキーマ
 └── .env.local           # 環境変数
 ```
+
+## デプロイ
+
+### Vercel
+
+```bash
+# Vercel CLIでデプロイ
+npm i -g vercel
+vercel --prod
+```
+
+環境変数を Vercel ダッシュボードで設定してください。
 
 ## ライセンス
 

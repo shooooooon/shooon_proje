@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from './theme-toggle';
+import { ThemeToggle } from '../theme-toggle';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,8 +38,18 @@ export default function Header() {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
+              <Link href="/posts">
+                記事一覧
+              </Link>
+            </Button>
+            <Button variant="ghost" size="sm" asChild>
               <Link href="/about">
                 About
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon-sm" asChild>
+              <Link href="/search">
+                <Search className="w-4 h-4" />
               </Link>
             </Button>
             <div className="ml-2">
@@ -70,7 +80,7 @@ export default function Header() {
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
             isMenuOpen
-              ? 'max-h-48 opacity-100'
+              ? 'max-h-60 opacity-100'
               : 'max-h-0 opacity-0'
           }`}
         >
@@ -91,8 +101,29 @@ export default function Header() {
               className="w-full justify-start"
               asChild
             >
+              <Link href="/posts" onClick={closeMenu}>
+                記事一覧
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start"
+              asChild
+            >
               <Link href="/about" onClick={closeMenu}>
                 About
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start"
+              asChild
+            >
+              <Link href="/search" onClick={closeMenu}>
+                <Search className="w-4 h-4 mr-2" />
+                検索
               </Link>
             </Button>
           </div>

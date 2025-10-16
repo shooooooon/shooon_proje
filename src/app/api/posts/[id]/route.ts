@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/client/supabase';
 import { generateSlug } from '@/lib/utils';
 
 // GET /api/posts/[id] - IDで投稿を取得

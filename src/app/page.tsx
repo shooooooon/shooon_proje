@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
-import { mockPosts } from '@/lib/mock-data';
+import { fetchPosts } from '@/lib/api';
+import { mockPosts } from '@/lib/data/mock-data';
 import { Post } from '@/types/post';
-import PostCard from '@/components/PostCard';
+import PostCard from '@/components/posts/PostCard';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -19,17 +19,7 @@ async function getPosts(): Promise<Post[]> {
   }
 
   // 実際のSupabase接続
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching posts:', error);
-    return [];
-  }
-
-  return data || [];
+  return await fetchPosts();
 }
 
 function EmptyState() {

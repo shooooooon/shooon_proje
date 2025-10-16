@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/client/supabase';
 
 // GET /api/stats - ブログ統計を取得
 export async function GET() {

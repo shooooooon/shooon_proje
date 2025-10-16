@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/client/supabase';
 
 // GET /api/posts/slug/[slug] - スラッグで投稿を取得
 export async function GET(

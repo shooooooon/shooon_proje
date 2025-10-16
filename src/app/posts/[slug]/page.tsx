@@ -15,8 +15,8 @@ import {
   Home,
   List
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
-import { mockPosts, getMockPostBySlug, getMockPostsByAuthor } from '@/lib/mock-data';
+import { fetchPostBySlug, fetchPostsByAuthor } from '@/lib/api';
+import { getMockPostBySlug, getMockPostsByAuthor } from '@/lib/data/mock-data';
 import { Post } from '@/types/post';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,17 +42,7 @@ async function getPost(slug: string): Promise<Post | null> {
   }
 
   // 実際のSupabase接続
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-
-  if (error) {
-    return null;
-  }
-
-  return data;
+  return await fetchPostBySlug(slug);
 }
 
 async function getRelatedPosts(authorName: string, currentPostId: string): Promise<Post[]> {
@@ -64,20 +54,10 @@ async function getRelatedPosts(authorName: string, currentPostId: string): Promi
   }
 
   // 実際のSupabase接続
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('author', authorName)
-    .neq('id', currentPostId)
-    .order('created_at', { ascending: false })
-    .limit(3);
-
-  if (error) {
-    console.error('Error fetching related posts:', error);
-    return [];
-  }
-
-  return data || [];
+  const allPosts = await fetchPostsByAuthor(authorName);
+  return allPosts
+    .filter(post => post.id !== currentPostId)
+    .slice(0, 3);
 }
 
 function extractHeadings(content: string): HeadingItem[] {
